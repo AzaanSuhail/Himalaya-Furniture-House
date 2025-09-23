@@ -1,0 +1,30 @@
+{
+  "name": "himalaya_furniture_house",
+  "version": "1.0.0",
+  "description": "Renowned furniture store in bareilly",
+  "keywords": [
+    "Himalaya_Furniture_House"
+  ],
+  "license": "ISC",
+  "author": "Azaan Suhail",
+  "type": "module",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "cloudinary": "^2.7.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.1",
+    "embla-carousel": "^8.6.0",
+    "express": "^5.1.0",
+    "ioredis": "^5.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.1",
+    "node-mailer": "^0.1.1",
+    "nodemon": "^3.1.10"
+  }
+}
