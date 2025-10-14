@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import ResponsiveContainer from '../components/ResponsiveContainer';
 
 export default function CreateProduct() {
@@ -46,15 +45,7 @@ export default function CreateProduct() {
         });
     };
 
-    const leftVariant = {
-        hidden: { x: -80, opacity: 0 },
-        visible: { x: 0, opacity: 1 },
-    };
 
-    const rightVariant = {
-        hidden: { x: 80, opacity: 0 },
-        visible: { x: 0, opacity: 1 },
-    };
 
     return (
         <ResponsiveContainer>
@@ -66,11 +57,9 @@ export default function CreateProduct() {
                 ></div>
 
                 {/* Product Form */}
-                <motion.form
+                <form
                     onSubmit={handleSubmit}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ staggerChildren: 0.2 }}
+
                     className="relative z-10 bg-[#0d1326]/95 shadow-xl rounded-2xl p-8 w-full max-w-lg border border-[#24DEB9]/30"
                 >
                     <h2 className="text-3xl font-semibold text-center text-[#24DEB9] mb-6">
@@ -78,15 +67,15 @@ export default function CreateProduct() {
                     </h2>
 
                     {/* Name */}
-                    <motion.div
-                        variants={leftVariant}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    <div
+
                         className="mb-4"
                     >
-                        <label className="block text-gray-300 mb-2 font-medium">
+                        <label htmlFor="name" className="block text-gray-300 mb-2 font-medium">
                             Product Name
                         </label>
                         <input
+                            id="name"
                             type="text"
                             name="name"
                             placeholder="Enter product name"
@@ -95,18 +84,18 @@ export default function CreateProduct() {
                             className="w-full p-3 rounded-lg border border-gray-600 bg-[#1a2035] text-white placeholder-gray-400 focus:ring-2 focus:ring-[#24DEB9] outline-none"
                             required
                         />
-                    </motion.div>
+                    </div>
 
                     {/* Description */}
-                    <motion.div
-                        variants={rightVariant}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    <div
+
                         className="mb-4"
                     >
-                        <label className="block text-gray-300 mb-2 font-medium">
+                        <label htmlFor="description" className="block text-gray-300 mb-2 font-medium">
                             Description
                         </label>
                         <textarea
+                            id="description"
                             name="description"
                             placeholder="Enter product description"
                             value={formData.description}
@@ -115,18 +104,18 @@ export default function CreateProduct() {
                             className="w-full p-3 rounded-lg border border-gray-600 bg-[#1a2035] text-white placeholder-gray-400 focus:ring-2 focus:ring-[#24DEB9] outline-none"
                             required
                         />
-                    </motion.div>
+                    </div>
 
                     {/* Price */}
-                    <motion.div
-                        variants={leftVariant}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    <div
+
                         className="mb-4"
                     >
-                        <label className="block text-gray-300 mb-2 font-medium">
+                        <label htmlFor="price" className="block text-gray-300 mb-2 font-medium">
                             Price (₹)
                         </label>
                         <input
+                            id="price"
                             type="number"
                             name="price"
                             placeholder="Enter price"
@@ -135,38 +124,55 @@ export default function CreateProduct() {
                             className="w-full p-3 rounded-lg border border-gray-600 bg-[#1a2035] text-white placeholder-gray-400 focus:ring-2 focus:ring-[#24DEB9] outline-none"
                             required
                         />
-                    </motion.div>
+                    </div>
 
-                    {/* Category */}
-                    <motion.div
-                        variants={rightVariant}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    {/* Category (select from predefined options) */}
+                    <div
+
                         className="mb-4"
                     >
-                        <label className="block text-gray-300 mb-2 font-medium">
+                        <label htmlFor="category" className="block text-gray-300 mb-2 font-medium">
                             Category
                         </label>
-                        <input
-                            type="text"
+                        <select
+                            id="category"
                             name="category"
-                            placeholder="Enter category"
                             value={formData.category}
                             onChange={handleChange}
                             className="w-full p-3 rounded-lg border border-gray-600 bg-[#1a2035] text-white placeholder-gray-400 focus:ring-2 focus:ring-[#24DEB9] outline-none"
                             required
-                        />
-                    </motion.div>
+                        >
+                            <option value="" disabled>
+                                -- Select category --
+                            </option>
+                            <option value="Living Room">Living Room</option>
+                            <option value="Bedroom">Bedroom</option>
+                            <option value="Dining Room">Dining Room</option>
+                            <option value="Office Furniture">Office Furniture</option>
+                            <option value="Outdoor Furniture">Outdoor Furniture</option>
+                            <option value="Chairs">Chairs</option>
+                            <option value="Tables">Tables</option>
+                            <option value="Beds">Beds</option>
+                            <option value="Sofas">Sofas</option>
+                            <option value="Storage">Storage</option>
+                            <option value="Decor">Decor</option>
+                            <option value="Room Dividers">Room Dividers</option>
+                            <option value="Shoe Racks">Shoe Racks</option>
+                            <option value="Coat Racks">Coat Racks</option>
+                            <option value="Pet Furniture">Pet Furniture</option>
+                        </select>
+                    </div>
 
                     {/* Image Upload */}
-                    <motion.div
-                        variants={leftVariant}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    <div
+
                         className="mb-6"
                     >
-                        <label className="block text-gray-300 mb-2 font-medium">
+                        <label htmlFor="image" className="block text-gray-300 mb-2 font-medium">
                             Product Image
                         </label>
                         <input
+                            id="image"
                             type="file"
                             name="image"
                             accept="image/*"
@@ -180,18 +186,17 @@ export default function CreateProduct() {
                                 className="mt-3 w-32 h-32 object-cover rounded-lg border border-[#24DEB9]/40"
                             />
                         )}
-                    </motion.div>
+                    </div>
 
                     {/* Button */}
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                    <button
+
                         type="submit"
                         className="w-full bg-[#24DEB9] text-black py-3 rounded-lg font-semibold hover:font-semibold text-lg hover:bg-[#1ed1a3] transition-all duration-300"
                     >
                         Create Product
-                    </motion.button>
-                </motion.form>
+                    </button>
+                </form>
             </div>
         </ResponsiveContainer>
     );

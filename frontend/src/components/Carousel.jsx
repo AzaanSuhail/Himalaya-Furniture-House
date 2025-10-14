@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -9,7 +10,7 @@ const ProductCarousel = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await fetch("/api/products/getAllProducts"); // change to your backend endpoint
+                const res = await fetch("/api/products/getAllProducts"); // 
                 const data = await res.json();
                 // backend returns { products: [...] }
                 setProducts(data.products || data || []);
@@ -30,7 +31,7 @@ const ProductCarousel = () => {
             >
                 {[...products, ...products].map((product, index) => (
                     <div
-                        key={index}
+                        key={product._id ? `${product._id}-${index}` : index}
                         className="min-w-[250px] bg-[#1e1e1e] text-white rounded-2xl shadow-lg p-4"
                     >
                         <img
@@ -47,7 +48,7 @@ const ProductCarousel = () => {
 
             <div className="lg:hidden overflow-x-auto px-4 py-6 scroll-pl-4 snap-x snap-mandatory flex gap-4">
                 {products.map((product, index) => (
-                    <div key={index} className="min-w-[220px] snap-start bg-[#1e1e1e] text-white rounded-2xl shadow-lg p-4">
+                    <div key={product._id || index} className="min-w-[220px] snap-start bg-[#1e1e1e] text-white rounded-2xl shadow-lg p-4">
                         <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded-xl" />
                         <h2 className="mt-2 text-lg font-bold">{product.name}</h2>
                         <p className="text-sm text-gray-400">{product.description}</p>

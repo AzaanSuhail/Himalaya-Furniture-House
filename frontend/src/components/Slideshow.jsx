@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
+/* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 
 const images = [
   "/img1.jpg",
   "/img2.jpg",
-  "/img3.jpg",
   "/img4.jpg",
   "/img5.jpg",
   "/img6.jpg",
   "/img7.jpg",
   "/img8.jpg",
+  "./s2.jpeg",
+  "./s3.jpg",
+  "./s4.webp",
+  "./s7.webp",
+  "./s10.webp",
+  "./s9.jpg"
+  
 ];
 
 export default function AutoSlideshow() {
@@ -28,16 +35,12 @@ export default function AutoSlideshow() {
     <div className="relative w-full h-[50vh] md:h-[80vh] overflow-hidden shadow-lg">
       {images.map((img, index) => (
         <motion.img
-          key={index}
+          key={img}
           src={img}
           alt={`Slide ${index}`}
           className="absolute top-0 left-0 w-full h-full object-cover"
-          initial={{ opacity: 0, scale: 1.1, x: 50 }} // start zoomed & shifted
-          animate={
-            index === currentIndex
-              ? { opacity: 1, scale: 1, x: 0 }
-              : { opacity: 0, scale: 1.1, x: -50 }
-          }
+          initial={{ opacity: 0, scale: 1.1, x: 50 }}
+          animate={index === currentIndex ? { opacity: 1, scale: 1, x: 0 } : { opacity: 0, scale: 1.1, x: -50 }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
         />
       ))}

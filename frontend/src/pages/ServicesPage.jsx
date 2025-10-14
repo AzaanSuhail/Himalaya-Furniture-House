@@ -1,4 +1,5 @@
 import React from 'react';
+/* eslint-disable no-unused-vars */
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'; // 1. Import the hook
 import ResponsiveContainer from '../components/ResponsiveContainer';
@@ -96,8 +97,8 @@ export default function ServicesPage() {
               viewport={{ once: true, amount: 0.3 }}
               className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center"
             >
-              {services.map((service, index) => (
-                <motion.div key={index} variants={fadeIn} className="flex flex-col items-center">
+              {services.map((service) => (
+                <motion.div key={service.title} variants={fadeIn} className="flex flex-col items-center">
                   <div className="p-4 bg-blue-100 rounded-full mb-4">{service.icon}</div>
                   <h3 className="text-2xl font-semibold text-gray-800">{service.title}</h3>
                   <p className="mt-2 text-gray-600">{service.description}</p>

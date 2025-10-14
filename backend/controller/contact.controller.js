@@ -4,11 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 console.log('Attempting to use email:', process.env.EMAIL_USER);
-console.log('Is password loaded?:', !!process.env.EMAIL_PASS ? "Yes" : "NO, IT'S UNDEFINED!");
+console.log('Is password loaded?:', process.env.EMAIL_PASS ? "Yes" : "NO, IT'S UNDEFINED!");
 
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
-const STORE_EMAIL = process.env.STORE_EMAIL || EMAIL_USER || 'azaan.suhail@gmail.com';
+const STORE_EMAIL = process.env.STORE_EMAIL || EMAIL_USER || '1965.himalaya.furniture.house@gmail.com';
 
 if (!EMAIL_USER || !EMAIL_PASS) {
     console.warn('⚠️ EMAIL_USER or EMAIL_PASS not set. Email sending will fail until these environment variables are configured.');
@@ -62,10 +62,9 @@ export const contact = async (req, res) => {
         console.error('🔴 Error sending email:', error);
 
         // For easier backend testing, return the error message in non-production only
-        const responseMessage =
-            process.env.NODE_ENV === 'production'
-                ? 'Failed to send email.'
-                : (error && error.message) || String(error);
+        const responseMessage = process.env.NODE_ENV === 'production'
+            ? 'Failed to send email.'
+            : (error?.message) || String(error);
 
         return res.status(500).json({ message: responseMessage });
     }

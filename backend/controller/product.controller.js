@@ -1,22 +1,39 @@
 import Product from "../models/product.model.js";
-import {redis} from "../db/redis.js";
+import User from "../models/user.model.js"; // Import User model
 import cloudinary from "../db/cloudinary.js";
-import User from "../models/user.model.js";
+import mongoose from "mongoose";
 
 export const getAllProducts = async (req, res) => {
-    try {
-       const products = await Product.find({}); // find all products
+	try {
+		const products = await Product.find({}); // find all products
 		res.json({ products });
 
-        console.log("All products fetched successfully ✅");
-    } catch (error) {
-        console.log("Error in getHomeProducts controller ❌", error);
-        res.status(500).send({
-            success: false,
-            message: "Error in getHomeProducts controller ❌",
-            error,
-        });
-    }
+		console.log("All products fetched successfully ✅");
+	} catch (error) {
+		console.log("Error in getHomeProducts controller ❌", error);
+		res.status(500).send({
+			success: false,
+			message: "Error in getHomeProducts controller ❌",
+			error,
+		});
+	}
+};
+
+// Fetch products by category (case-insensitive match)
+export const getProductsByCategory = async (req, res) => {
+	try {
+		const { slug } = req.params;
+		if (!slug) return res.status(400).json({ message: 'Category slug is required' });
+
+		// match case-insensitive; allow partial match so stored categories like "Dining Room" match slug 'dining-room'
+		const regex = new RegExp(slug.replace(/-/g, '\\s*'), 'i');
+		const products = await Product.find({ category: { $regex: regex } });
+
+		res.json({ products });
+	} catch (error) {
+		console.log('Error in getProductsByCategory controller ❌', error);
+		res.status(500).json({ message: 'Server error', error: error.message });
+	}
 };
 
 
@@ -72,63 +89,64 @@ export const deleteProduct = async (req, res) => {
 	}
 };
 
-// Add product to user's wishlist
-export const addToWishlist = async (req, res) => {
+// Update product (admin)
+export const updateProduct = async (req, res) => {
 	try {
-		const userId = req.user._id;
-		const { productId } = req.body;
+		const updates = req.body;
 
-		const product = await Product.findById(productId);
-		if (!product) return res.status(404).json({ message: 'Product not found' });
-
-		const user = await User.findById(userId);
-		if (!user) return res.status(404).json({ message: 'User not found' });
-
-		// prevent duplicates
-		if (user.wishlist && user.wishlist.includes(productId)) {
-			return res.status(200).json({ message: 'Product already in wishlist' });
+		// If image is present as base64 or url, attempt to upload to cloudinary
+		if (updates.image?.startsWith('data:')) {
+			try {
+				const cloudinaryResponse = await cloudinary.uploader.upload(updates.image, { folder: 'products' });
+				updates.image = cloudinaryResponse.secure_url;
+			} catch (err) {
+				console.log('Cloudinary upload failed for update', err.message);
+			}
 		}
 
-		user.wishlist = [...(user.wishlist || []), productId];
-		await user.save();
+		const product = await Product.findByIdAndUpdate(req.params.id, updates, { new: true });
+		if (!product) return res.status(404).json({ message: 'Product not found' });
 
-		res.json({ success: true, message: 'Added to wishlist', wishlist: user.wishlist });
+		res.json({ message: 'Product updated', product });
 	} catch (error) {
-		console.log('Error in addToWishlist controller❌', error.message);
+		console.log('Error in updateProduct controller❌', error.message);
 		res.status(500).json({ message: 'Server error', error: error.message });
 	}
 };
 
-// Remove product from user's wishlist
+export const addToWishlist = async (req, res) => {
+    try {
+        const { productId } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user.wishlist.includes(productId)) {
+            user.wishlist.push(productId);
+            await user.save();
+        }
+        const wishlist = await User.findById(req.user.id).populate('wishlist');
+        res.status(200).json({ wishlist });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to add to wishlist' });
+    }
+};
+
 export const removeFromWishlist = async (req, res) => {
-	try {
-		const userId = req.user._id;
-		const { productId } = req.body;
-
-		const user = await User.findById(userId);
-		if (!user) return res.status(404).json({ message: 'User not found' });
-
-		user.wishlist = (user.wishlist || []).filter(id => id.toString() !== productId.toString());
-		await user.save();
-
-		res.json({ success: true, message: 'Removed from wishlist', wishlist: user.wishlist });
-	} catch (error) {
-		console.log('Error in removeFromWishlist controller❌', error.message);
-		res.status(500).json({ message: 'Server error', error: error.message });
-	}
+    try {
+        const { productId } = req.body;
+        const user = await User.findById(req.user.id);
+        user.wishlist = user.wishlist.filter((id) => id.toString() !== productId);
+        await user.save();
+        const wishlist = await User.findById(req.user.id).populate('wishlist');
+        res.status(200).json({ wishlist });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to remove from wishlist' });
+    }
 };
 
-// Get user's wishlist (populated)
 export const getWishlist = async (req, res) => {
-	try {
-		const userId = req.user._id;
-
-		const user = await User.findById(userId).populate('wishlist');
-		if (!user) return res.status(404).json({ message: 'User not found' });
-
-		res.json({ success: true, wishlist: user.wishlist });
-	} catch (error) {
-		console.log('Error in getWishlist controller❌', error.message);
-		res.status(500).json({ message: 'Server error', error: error.message });
-	}
+    try {
+        const user = await User.findById(req.user.id).populate('wishlist');
+        res.status(200).json({ wishlist: user.wishlist });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch wishlist' });
+    }
 };

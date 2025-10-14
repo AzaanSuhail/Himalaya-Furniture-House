@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
             lowercase: true,
         },
         contact: {
-            type: String, //FIXME
+            type: String,
             required: [true, "Contact number is required"],
             unique: true,
         },

@@ -1,5 +1,7 @@
 import React from 'react';
+/* eslint-disable no-unused-vars */
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 import { Hammer, Wrench, Paintbrush2, Leaf, ShieldCheck, Truck, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
@@ -28,7 +30,6 @@ export default function BrandFeature({
     subtitle = 'Crafted for modern living',
     description = 'Explore hand-finished pieces in solid wood, premium upholstery, and timeless forms,designed to elevate every room.',
     ctaText = 'Our Services',
-    onCtaClick,
     heroImage = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1600&auto=format&fit=crop',
     logoUrl = 'https://placehold.co/200x200/2a211a/ffffff?text=Your+Brand',
     badges = [
@@ -104,9 +105,9 @@ export default function BrandFeature({
 
                         {/* Feature badges */}
                         <motion.div variants={item} className="mt-7 flex flex-wrap gap-3">
-                            {badges.slice(0, 6).map((b, i) => (
+                            {badges.slice(0, 6).map((b) => (
                                 <motion.div
-                                    key={i}
+                                    key={b.label}
                                     whileHover={{
                                         y: -2,
                                         boxShadow: '0px 6px 22px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.06)'
@@ -185,3 +186,14 @@ export default function BrandFeature({
         </section>
     );
 }
+
+BrandFeature.propTypes = {
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    description: PropTypes.string,
+    ctaText: PropTypes.string,
+    heroImage: PropTypes.string,
+    logoUrl: PropTypes.string,
+    badges: PropTypes.array,
+    backgroundTexture: PropTypes.string,
+};

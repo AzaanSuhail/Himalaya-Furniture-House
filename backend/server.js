@@ -31,3 +31,9 @@ app.listen(PORT,()=>{
     console.log(`Server is running ✅ on http://localhost:${PORT}`);
     connectDB();
 })
+
+
+
+
+
+// LEARN : add the attributes for SEO optimization also, add the icon in the footer near the himalaya furniture house
