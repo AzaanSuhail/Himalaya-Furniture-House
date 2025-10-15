@@ -1,3 +1,4 @@
+import path from "path";
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './db/mongodb.connection.js';
@@ -7,7 +8,6 @@ import bodyParser from 'body-parser';
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.route.js';
 import contactRoutes from './routes/contact.route.js';
-import path from "path";
 
 dotenv.config();
 
@@ -26,10 +26,6 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 app.use(cookieParser());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/send-mail', contactRoutes);
-
 if (process.env.NODE_ENV == "production") {
     app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
@@ -37,6 +33,11 @@ if (process.env.NODE_ENV == "production") {
         res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
     })
 }
+
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/send-mail', contactRoutes);
+
 
 
 app.listen(PORT, () => {
