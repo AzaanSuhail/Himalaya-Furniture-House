@@ -9,9 +9,6 @@
   "author": "Azaan Suhail",
   "type": "module",
   "main": "backend/server.js",
-  "engines": {
-    "node": "22.x"
-  },
   "scripts": {
     "dev": "nodemon backend/server.js",
     "start": "node backend/server.js",
