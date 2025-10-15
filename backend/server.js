@@ -16,6 +16,8 @@ dotenv.config();
 const PORT = process.env.PORT || 5000
 const app = express();
 
+console.log({ authRoutes, productRoutes, contactRoutes });
+
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 const __dirname = path.resolve();

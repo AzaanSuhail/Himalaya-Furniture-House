@@ -12,6 +12,5 @@ router.delete('/deleteProduct/:id', protectedRoute, adminRoute, deleteProduct);
 router.put('/:id', protectedRoute, adminRoute, updateProduct);
 
 
-
 export default router;
 
