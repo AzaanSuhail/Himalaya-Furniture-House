@@ -9,7 +9,7 @@ router.get('/getAllProducts', getAllProducts); //This will same for the register
 
 router.post('/createProduct', protectedRoute, adminRoute, createProduct);
 router.delete('/deleteProduct/:id', protectedRoute, adminRoute, deleteProduct);
-router.put('/:id', protectedRoute, adminRoute, updateProduct);
+// router.put('/:id', protectedRoute, adminRoute, updateProduct);
 
 
 export default router;

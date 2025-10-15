@@ -1,5 +1,5 @@
 import Product from "../models/product.model.js";
-import User from "../models/user.model.js"; // Import User model
+import User from "../models/user.model.js"; 
 import cloudinary from "../db/cloudinary.js";
 import mongoose from "mongoose";
 
@@ -18,23 +18,6 @@ export const getAllProducts = async (req, res) => {
 		});
 	}
 };
-
-// Fetch products by category (case-insensitive match)
-// export const getProductsByCategory = async (req, res) => {
-// 	try {
-// 		const { slug } = req.params;
-// 		if (!slug) return res.status(400).json({ message: 'Category slug is required' });
-
-// 		// match case-insensitive; allow partial match so stored categories like "Dining Room" match slug 'dining-room'
-// 		const regex = new RegExp(slug.replace(/-/g, '\\s*'), 'i');
-// 		const products = await Product.find({ category: { $regex: regex } });
-
-// 		res.json({ products });
-// 	} catch (error) {
-// 		console.log('Error in getProductsByCategory controller ❌', error);
-// 		res.status(500).json({ message: 'Server error', error: error.message });
-// 	}
-// };
 
 
 export const createProduct = async (req, res) => {
