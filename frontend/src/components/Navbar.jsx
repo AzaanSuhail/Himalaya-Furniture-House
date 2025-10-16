@@ -13,7 +13,7 @@ const Navbar = () => {
     const { user, logout } = useAuth();
     const isAuthenticated = !!user;
     const isAdmin = user?.role === 'admin';
-    const [wishlistCount, setWishlistCount] = useState(0);
+    // const [wishlistCount, setWishlistCount] = useState(0);
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleLocate = () => {
