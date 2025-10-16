@@ -26,31 +26,34 @@ app.use(cookieParser());
 // ⭐ CONFIGURATION TO FIX CONTENT SECURITY POLICY ERROR (CSP) ⭐
 // ------------------------------------------------------------------
 
+// ------------------------------------------------------------------
+// ⭐ CONFIGURATION TO FIX CONTENT SECURITY POLICY ERROR (CSP) ⭐
+// ------------------------------------------------------------------
+
 app.use(
     helmet({
-        // Disable the default 'frameguard' to allow embedding if necessary (optional)
-        // frameguard: false, 
-
         contentSecurityPolicy: {
             directives: {
-                // Allows resources from your own domain ('self')
-                'default-src': ["'self'"],
+                defaultSrc: ["'self'"],
+                // ✅ Allow scripts from self and inline (for React hydration)
+                scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+                scriptSrcElem: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
 
-                // Allows scripts (JS) from your domain
-                'script-src': ["'self'"],
+                // ✅ Allow styles from self and Google Fonts
+                styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+                styleSrcElem: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
 
-                // Allows styles (CSS) from your domain AND Google Fonts
-                'style-src': ["'self'", "https://fonts.googleapis.com"],
+                // ✅ Allow fonts from Google Fonts and self
+                fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
 
-                // Allows the actual font files from Google's server
-                'font-src': ["'self'", "https://fonts.gstatic.com"],
+                // ✅ Allow images from self and data URIs
+                imgSrc: ["'self'", "data:"],
 
-                // Allows images/assets from your domain ('self') and data URIs (e.g., base64 images)
-                'img-src': ["'self'", "data:"],
+                // ✅ Allow API calls to your own domain
+                connectSrc: ["'self'"],
 
-                // You may need to add this if using inline event handlers or styles (less secure)
-                // 'script-src-elem': ["'self'", "'unsafe-inline'"],
-                // 'style-src-elem': ["'self'", "https://fonts.googleapis.com", "'unsafe-inline'"],
+                // ✅ Allow iframes/videos only from self (optional)
+                frameSrc: ["'self'"],
             },
         },
     })
@@ -59,7 +62,6 @@ app.use(
 // ------------------------------------------------------------------
 // ⭐ END HELMET CONFIGURATION ⭐
 // ------------------------------------------------------------------
-
 
 // API routes
 app.use('/api/auth', authRoutes);
