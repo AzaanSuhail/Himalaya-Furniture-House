@@ -97,6 +97,22 @@ export const updateProduct = async (req, res) => {
 	}
 };
 
+export const getProductsByCategory = async (req, res) => {
+	try {
+		const { slug } = req.params;
+		if (!slug) return res.status(400).json({ message: 'Category slug is required' });
+
+		// match case-insensitive; allow partial match so stored categories like "Dining Room" match slug 'dining-room'
+		const regex = new RegExp(slug.replace(/-/g, '\\s*'), 'i');
+		const products = await Product.find({ category: { $regex: regex } });
+
+		res.json({ products });
+	} catch (error) {
+		console.log('Error in getProductsByCategory controller ❌', error);
+		res.status(500).json({ message: 'Server error', error: error.message });
+	}
+};
+
 export const addToWishlist = async (req, res) => {
     try {
         const { productId } = req.body;
@@ -133,3 +149,5 @@ export const getWishlist = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch wishlist' });
     }
 };
+
+
