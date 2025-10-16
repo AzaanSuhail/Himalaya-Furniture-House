@@ -15,33 +15,22 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 const __dirname = path.resolve();
 
-// ✅ Helmet — FIRST middleware
-app.use(
-    helmet({
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],
-                scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-                styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-                fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
-                imgSrc: ["'self'", "data:"],
-                connectSrc: ["'self'"],
-            },
-        },
-    })
-);
+// ✅ Helmet first
+app.use(helmet({
+    contentSecurityPolicy: false, // Disable Helmet’s default CSP
+}));
 
-// ✅ Force-override any default Render CSP (place RIGHT AFTER helmet)
+// ✅ Force remove Render's CSP
 app.use((req, res, next) => {
     res.removeHeader("Content-Security-Policy");
     res.setHeader(
         "Content-Security-Policy",
-        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:;"
+        "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
     );
     next();
 });
 
-// ✅ Then parsers and cookies
+// ✅ Parsers and cookies
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
