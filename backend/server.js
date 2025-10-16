@@ -72,6 +72,9 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 
+console.log('Attaching User Routes to path:', '/api/v1/user'); // Replace with your actual path variable if used
+app.use('/api/v1/user', userRoutes);
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
