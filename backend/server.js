@@ -31,6 +31,16 @@ app.use(
     })
 );
 
+// ✅ Force-override any default Render CSP (place RIGHT AFTER helmet)
+app.use((req, res, next) => {
+    res.removeHeader("Content-Security-Policy");
+    res.setHeader(
+        "Content-Security-Policy",
+        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:;"
+    );
+    next();
+});
+
 // ✅ Then parsers and cookies
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
