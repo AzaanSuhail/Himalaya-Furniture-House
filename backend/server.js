@@ -118,17 +118,17 @@ const CSP_HEADER = CORRECTED_CSP_VALUE.replace(/\s+/g, ' ').trim();
 
 // Function to apply the CSP header
 const setCspHeader = (req, res, next) => {
-  res.removeHeader("Content-Security-Policy");
-  res.setHeader("Content-Security-Policy", CSP_HEADER);
-  next();
+    res.removeHeader("Content-Security-Policy");
+    res.setHeader("Content-Security-Policy", CSP_HEADER);
+    next();
 };
 
 // ----------------------------------------------------
 // ✅ Helmet for other security headers
 app.use(
-  helmet({
-    contentSecurityPolicy: false, // disable CSP here since we set our own
-  })
+    helmet({
+        contentSecurityPolicy: false, // disable CSP here since we set our own
+    })
 );
 
 // ✅ Apply CSP on all routes
@@ -146,23 +146,23 @@ app.use("/api/send-mail", contactRoutes);
 
 // ✅ Serve frontend in production
 if (process.env.NODE_ENV === "production") {
-  app.use(
-    express.static(path.join(__dirname, "frontend", "dist"), {
-      setHeaders: (res) => {
-        res.setHeader("Content-Security-Policy", CSP_HEADER);
-      },
-    })
-  );
+    app.use(
+        express.static(path.join(__dirname, "frontend", "dist"), {
+            setHeaders: (res) => {
+                res.setHeader("Content-Security-Policy", CSP_HEADER);
+            },
+        })
+    );
 
-  // Catch-all route for React Router
-  app.get("*", (req, res) => {
-    res.setHeader("Content-Security-Policy", CSP_HEADER);
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-  });
+    // Catch-all route for React Router
+    app.get("*", (req, res) => {
+        res.setHeader("Content-Security-Policy", CSP_HEADER);
+        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+    });
 }
 
 // ✅ Start server
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  connectDB();
+    console.log(`✅ Server running on http://localhost:${PORT}`);
+    connectDB();
 });
