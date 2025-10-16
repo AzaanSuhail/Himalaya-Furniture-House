@@ -15,12 +15,14 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 const __dirname = path.resolve();
 
-// ✅ Helmet first
-app.use(helmet({
-    contentSecurityPolicy: false, // Disable Helmet’s default CSP
-}));
+// ✅ Helmet — disable CSP to avoid double-conflict
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
 
-// ✅ Force remove Render's CSP
+// ✅ Middleware to fully override Render’s CSP
 app.use((req, res, next) => {
     res.removeHeader("Content-Security-Policy");
     res.setHeader(
@@ -40,15 +42,23 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/send-mail", contactRoutes);
 
-// ✅ Static serving
+// ✅ Static frontend
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "frontend", "dist")));
-    app.get("*", (req, res) => {
+
+    // ✅ CSP override for static routes too
+    app.get("*", (req, res, next) => {
+        res.removeHeader("Content-Security-Policy");
+        res.setHeader(
+            "Content-Security-Policy",
+            "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
+        );
         res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
     });
 }
 
+// ✅ Start server
 app.listen(PORT, () => {
-    console.log(`Server running ✅ on http://localhost:${PORT}`);
+    console.log(`✅ Server running on http://localhost:${PORT}`);
     connectDB();
 });
