@@ -1,4 +1,3 @@
-
 import path from "path";
 import express from "express";
 import dotenv from "dotenv";
@@ -16,20 +15,17 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 const __dirname = path.resolve();
 
-app.use(helmet());
-app.use(helmet.crossOriginEmbedderPolicy({ policy: "credentialless" }));
+// ✅ Security: Helmet setup (simplified and conflict-free)
 app.use(
     helmet({
-        crossOriginEmbedderPolicy: false,
-        originAgentCluster: true
-    })
-);
-app.use(
-    helmet.contentSecurityPolicy({
-        useDefaults: true,
-        directives: {
-            "img-src": ["'self'", "https:", "data:", "blob:"]
-        }
+        crossOriginEmbedderPolicy: false, // disable COEP for compatibility
+        originAgentCluster: true,
+        contentSecurityPolicy: {
+            useDefaults: true,
+            directives: {
+                "img-src": ["'self'", "https:", "data:", "blob:"],
+            },
+        },
     })
 );
 
@@ -45,18 +41,12 @@ app.use("/api/send-mail", contactRoutes);
 
 // ✅ Serve frontend in production
 if (process.env.NODE_ENV === "production") {
-    app.use(
-        express.static(path.join(__dirname, "frontend", "dist"), {
-            setHeaders: (res) => {
-                res.setHeader("Content-Security-Policy", CSP_HEADER);
-            },
-        })
-    );
+    const frontendPath = path.join(__dirname, "frontend", "dist");
+    app.use(express.static(frontendPath));
 
-    // Catch-all route for React Router
+    // Catch-all route (React Router)
     app.get("*", (req, res) => {
-        res.setHeader("Content-Security-Policy", CSP_HEADER);
-        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+        res.sendFile(path.resolve(frontendPath, "index.html"));
     });
 }
 
