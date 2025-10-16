@@ -221,14 +221,3 @@ export const me = async (req, res) => {
     }
 };
 
-export const me = async (req, res) => {
-    try {
-        if (!req.user) return res.status(401).json({ message: 'Not authenticated' });
-        // send user without password
-        const { _id, name, email, role, contact } = req.user;
-        res.json({ _id, name, email, role, contact });
-    } catch (error) {
-        console.log('Error in me controller❌', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-};
