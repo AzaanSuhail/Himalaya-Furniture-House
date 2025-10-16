@@ -4,13 +4,10 @@ import { adminRoute, protectedRoute } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('/getAllProducts', getAllProducts); //This will same for the registered users 
-// router.get('/category/:slug', getProductsByCategory);
-
+router.get('/getAllProducts', getAllProducts); 
 router.post('/createProduct', protectedRoute, adminRoute, createProduct);
 router.delete('/deleteProduct/:id', protectedRoute, adminRoute, deleteProduct);
-// router.put('/:id', protectedRoute, adminRoute, updateProduct);
-
+router.put('/updateProduct/:id', protectedRoute, adminRoute, updateProduct);
 
 export default router;
 
